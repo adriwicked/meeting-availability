@@ -1,19 +1,24 @@
 import setuptools
 
-with open('README.rst') as f:
+with open('README.md') as f:
     readme = f.read()
 
 with open('LICENSE') as f:
     license = f.read()
 
 setuptools.setup(
-    name="meeting-availability",
-    version="0.0.1",
+    name="meeting_availability",
+    version="0.0.2",
+    description="A module that allows you to know available time blocks for two people to meet.",
+    long_description=readme,
     author="Adrián Moreno",
     author_email="adrianmn90@gmail.com",
-    description="A module that allows you to know available time blocks for two people to meet.",
     license=license,
-    long_description=readme,
     url="https://github.com/adriwicked/meeting-availability",
-    packages=setuptools.find_packages(exclude=('tests', 'docs')),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    packages=['meeting_availability'],
 )
