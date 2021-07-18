@@ -1,14 +1,9 @@
 def get_available_time_blocks(cal1, cal2, meeting_duration):
     meetings = cal1['meetings'] + cal2['meetings']
-
     meetings.sort(key=lambda m: time_to_minutes(m[0]))
-
     meetings = flat_overlapping_meetings(meetings)
-
     bounds = merge_bounds(cal1['bounds'], cal2['bounds'])
-    print('bounds', bounds)
     available_time = get_available_time(meetings, bounds)
-
     available_time = list(filter(
         lambda time_block: is_block_long_enough(time_block, meeting_duration),
         available_time
@@ -38,7 +33,7 @@ def flat_overlapping_meetings(meetings):
         else:
             if compare_times(end_time, meetings[i][1]) <= 0:
                 end_time = meetings[i][1]
-            
+
     merged_meetings.append([start_time, end_time])
 
     return merged_meetings
@@ -57,7 +52,7 @@ def merge_bounds(b1, b2):
 def get_available_time(meetings, bounds):
     meetings = clamp_meetings_by_bounds(meetings, bounds)
 
-    available_time = []    
+    available_time = []
 
     if compare_times(bounds[0], meetings[0][0]) < 0:
         available_time.append([bounds[0], meetings[0][0]])

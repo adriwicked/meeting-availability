@@ -8,7 +8,7 @@ with open('LICENSE') as f:
 
 setuptools.setup(
     name="meeting_availability",
-    version="1.0.0",
+    version="1.0.1",
     description="A module that allows you to know available time blocks for two people to meet.",
     long_description=readme,
     author="Adrián Moreno",
