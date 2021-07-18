@@ -18,6 +18,9 @@ def get_available_time_blocks(cal1, cal2, meeting_duration):
 
 
 def time_to_minutes(str_time):
+    if not isinstance(str_time, str):
+        return None
+
     hours, minutes = str_time.split(':')
     return int(hours) * 60 + int(minutes)
 
@@ -35,9 +38,8 @@ def flat_overlapping_meetings(meetings):
         else:
             if compare_times(end_time, meetings[i][1]) <= 0:
                 end_time = meetings[i][1]
-            # else:
-                # Next block start should be checked here
-                #merged_meetings.append([start_time, end_time])
+            
+    merged_meetings.append([start_time, end_time])
 
     return merged_meetings
 
@@ -49,11 +51,13 @@ def compare_times(t1, t2):
 def merge_bounds(b1, b2):
     start_bound = b1[0] if compare_times(b1[0], b2[0]) > 0 else b2[0]
     end_bound = b1[1] if compare_times(b1[1], b2[1]) < 0 else b2[1]
-    return [start_bound, end_bound]
+    return [start_bound, end_bound] if compare_times(start_bound, end_bound) < 0 else None
 
 
 def get_available_time(meetings, bounds):
-    available_time = []
+    meetings = clamp_meetings_by_bounds(meetings, bounds)
+
+    available_time = []    
 
     if compare_times(bounds[0], meetings[0][0]) < 0:
         available_time.append([bounds[0], meetings[0][0]])
@@ -65,6 +69,17 @@ def get_available_time(meetings, bounds):
         available_time.append([meetings[len(meetings) - 1][1], bounds[1]])
 
     return available_time
+
+
+def clamp_meetings_by_bounds(meetings, bounds):
+    return list(filter(
+        lambda m: is_meeting_inside_bounds(m, bounds),
+        meetings
+    ))
+
+
+def is_meeting_inside_bounds(meeting, bounds):
+    return compare_times(meeting[1], bounds[0]) > 0 and compare_times(meeting[0], bounds[1]) < 0
 
 
 def is_block_long_enough(block, duration):
